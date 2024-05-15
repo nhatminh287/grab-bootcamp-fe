@@ -1,8 +1,11 @@
-import { Image, Title } from "@mantine/core";
+import { Image, Title, Button } from "@mantine/core";
+import { useEffect, useState } from "react";
 import Logo from "@/assets/images/logo.png";
 import { Form, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Select } from "react-hook-form-mantine";
+import { citiesApi, } from "@/services";
+import { notifications } from "@mantine/notifications";
 import * as yup from "yup";
 interface IFormData {
   country: string;
@@ -15,6 +18,8 @@ const schema = yup.object().shape({
 });
 
 export default function Nearbycities() {
+  const [cities, setCities] = useState<string[]>()
+  const [citiesNearby, setCitiesNearby] = useState<string[]>()
   const {
     control,
     reset,
@@ -29,6 +34,45 @@ export default function Nearbycities() {
     },
   });
 
+  useEffect(() => {
+    getCities();
+
+  }, []);
+
+  const getCities = async () => {
+    const res = await citiesApi.getCities();
+    if (res) {
+      console.log(res);
+      let uniqueArray = res.filter((item, index) => res.indexOf(item) === index);
+      setCities(uniqueArray);
+    }
+  }
+
+  const handleSubmit = async (data: IFormData) => {
+    
+    console.log(data);
+
+    const res = await citiesApi.getCitiesNearby(data.city);
+    console.log(res);
+    setCitiesNearby(res);
+    if (res) {
+      notifications.show({
+        title: 'Success',
+        message: 'Success',
+        color: 'teal.5',
+      });
+      reset();
+
+    }
+    else {
+      notifications.show({
+        title: 'Error',
+        message: 'Got error, please try again',
+        color: 'red.5',
+      });
+    }
+  }
+
   return (
     <div>
       <div className="mt-4 w-[700px] rounded-lg mx-auto bg-[#C5DDFF]">
@@ -41,42 +85,56 @@ export default function Nearbycities() {
         </Title>
       </div>
 
-      <div className="flex justify-between gap-4 items-end mx-2">
-        <Select
-          label="Country"
-          placeholder="Choose country"
-          required
-          name="country"
-          size="md"
-          radius="md"
-
-          allowDeselect
-          data={
-            ["Vietnam"]
-          }
-          searchable
-          w={"100%"}
-          control={control}
-        />
-
-        <Select
-          label="City"
-          placeholder="Choose city"
-          required
-          name="city"
-          size="md"
-          radius="md"
-
-          allowDeselect
-          data={
-            ["Huế", "Hà Nội"]
-          }
-          searchable
-         
-          w={"100%"}
-          control={control}
-        />
-      </div>
+      <Form 
+        control={control}
+        onSubmit={e => handleSubmit(e.data)}
+        onError={e => console.log(e)}>
+        <div className="flex justify-between gap-4 items-end mx-2">
+          <Select
+            label="Country"
+            placeholder="Choose country"
+            required
+            name="country"
+            size="md"
+            radius="md"
+            allowDeselect
+            data={
+              ["Vietnam"]
+            }
+            searchable
+            w={"100%"}
+            control={control}
+          />
+          <Select
+            label="City"
+            placeholder="Choose city"
+            required
+            name="city"
+            size="md"
+            radius="md"
+            allowDeselect
+            data={
+              cities
+            }
+            searchable
+        
+            w={"100%"}
+            control={control}
+          />
+          
+        </div>       
+        <Button className="mx-2" fullWidth mt="xl" radius="sm" size="md" type="submit">
+              Request nearby cities
+        </Button>
+      </Form>
+      {citiesNearby? (
+        <div className="mx-2 mt-1">
+          {citiesNearby.map((city, index) => (
+          // Each list item needs a unique key, using index as a key in this simple case
+            <Title order={3} key={index}>{`${index + 1}.${city}`}</Title>
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 }
