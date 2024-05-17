@@ -1,9 +1,9 @@
-
+import { ICitiesNearby } from '@/types';
 import { axiosClient } from '@/utils';
 
 export const citiesApi = {
 
-  getCities: (): Promise<string[]> => {
+  getCities: (): Promise<ICitiesNearby[]> => {
     return axiosClient.get(`/cities`);
   },
 

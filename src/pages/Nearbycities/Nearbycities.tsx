@@ -6,6 +6,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Select } from "react-hook-form-mantine";
 import { citiesApi, } from "@/services";
 import { notifications } from "@mantine/notifications";
+import { ICitiesNearby } from "@/types";
+import Map, { FullscreenControl, Marker, NavigationControl } from 'react-map-gl';
+import { IoLocation } from "react-icons/io5";
 import * as yup from "yup";
 interface IFormData {
   country: string;
@@ -18,8 +21,9 @@ const schema = yup.object().shape({
 });
 
 export default function Nearbycities() {
+  const key = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAOVYRIgupAurZup5y1PRh8Ismb1A3lLao&libraries=places&callback=initMap'
   const [cities, setCities] = useState<string[]>()
-  const [citiesNearby, setCitiesNearby] = useState<string[]>()
+  const [citiesNearby, setCitiesNearby] = useState<ICitiesNearby[]>()
   const {
     control,
     reset,
@@ -43,7 +47,8 @@ export default function Nearbycities() {
     const res = await citiesApi.getCities();
     if (res) {
       console.log(res);
-      let uniqueArray = res.filter((item, index) => res.indexOf(item) === index);
+      let citiesName = res.map(cityObject => cityObject.city);
+      let uniqueArray = citiesName.filter((item, index) => citiesName.indexOf(item) === index);
       setCities(uniqueArray);
     }
   }
@@ -74,7 +79,7 @@ export default function Nearbycities() {
   }
 
   return (
-    <div>
+    <div className="w-full">
       <div className="mt-4 w-[700px] rounded-lg mx-auto bg-[#C5DDFF]">
         <Image src={Logo} h={350} radius="lg" fit="contain" />
       </div>
@@ -128,13 +133,37 @@ export default function Nearbycities() {
         </Button>
       </Form>
       {citiesNearby? (
-        <div className="mx-2 mt-1">
-          {citiesNearby.map((city, index) => (
-          // Each list item needs a unique key, using index as a key in this simple case
-            <Title order={3} key={index}>{`${index + 1}.${city}`}</Title>
+        <div className="mx-auto mt-2 w-1/2">
+          {citiesNearby.map((city, index) => (          
+            <div key={index} className="mx-2 mt-2 ">
+              <div className="mb-3">
+                <Title order={3} >{`${index + 1}.${city.city}, ${city.state}`}</Title>
+              </div>
+              <Map
+                mapboxAccessToken="pk.eyJ1IjoiY29uZ3R1YW4wMTA0IiwiYSI6ImNsczF2eXRxYTBmbmcya2xka3B6cGZrMnQifQ.AHAzE7JIHyehx-m1YJbzFg"
+                mapLib={import('mapbox-gl')}
+                initialViewState={{
+                  longitude: city.longitude, 
+                  latitude: city.latitude,
+                  zoom: 10
+                }}
+                
+                style={{width: 600, height: 400}}
+                mapStyle="mapbox://styles/mapbox/streets-v12"
+              >
+                <FullscreenControl />
+                <NavigationControl />
+                {city.latitude && city.longitude && (
+                  <Marker latitude={city.latitude} longitude={city.longitude}>
+                    <IoLocation style={{ color: 'red' }} size={30} />
+                  </Marker>
+                )}
+              </Map>
+            </div>
           ))}
         </div>
       ) : null}
+          
     </div>
   );
 }
