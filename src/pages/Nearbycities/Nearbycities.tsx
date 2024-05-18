@@ -9,6 +9,7 @@ import { notifications } from "@mantine/notifications";
 import { ICitiesNearby } from "@/types";
 import Map, { FullscreenControl, Marker, NavigationControl } from 'react-map-gl';
 import { IoLocation } from "react-icons/io5";
+import { useNavigate } from 'react-router-dom';
 import * as yup from "yup";
 interface IFormData {
   country: string;
@@ -21,7 +22,7 @@ const schema = yup.object().shape({
 });
 
 export default function Nearbycities() {
-  const key = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAOVYRIgupAurZup5y1PRh8Ismb1A3lLao&libraries=places&callback=initMap'
+  const navigate = useNavigate();
   const [cities, setCities] = useState<string[]>()
   const [citiesNearby, setCitiesNearby] = useState<ICitiesNearby[]>()
   const {
@@ -136,8 +137,8 @@ export default function Nearbycities() {
         <div className="mx-auto mt-2 w-1/2">
           {citiesNearby.map((city, index) => (          
             <div key={index} className="mx-2 mt-2 ">
-              <div className="mb-3">
-                <Title order={3} >{`${index + 1}.${city.city}, ${city.state}`}</Title>
+              <div className="mb-3 cursor-pointer hover:opacity-50" onClick={() => navigate('/attraction',{ state: { state: city.state }})}>
+                <Title className="hover:underline" order={3} >{`${index + 1}.${city.city}, ${city.state}`}</Title>
               </div>
               <Map
                 mapboxAccessToken="pk.eyJ1IjoiY29uZ3R1YW4wMTA0IiwiYSI6ImNsczF2eXRxYTBmbmcya2xka3B6cGZrMnQifQ.AHAzE7JIHyehx-m1YJbzFg"
@@ -148,7 +149,7 @@ export default function Nearbycities() {
                   zoom: 10
                 }}
                 
-                style={{width: 600, height: 400}}
+                style={{width: 744, height: 595, borderRadius: 10}}
                 mapStyle="mapbox://styles/mapbox/streets-v12"
               >
                 <FullscreenControl />

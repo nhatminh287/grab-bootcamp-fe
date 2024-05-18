@@ -8,7 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 const links = [
   { link: '/', label: 'Home' },
   { link: '/nearbycities', label: 'Nearby cities' },
-  { link: '/learn', label: 'Attraction' },
+  { link: '/attraction', label: 'Attraction' },
   { link: '/community', label: 'Community' },
 ];
 

@@ -2,11 +2,13 @@ import { DefaultLayout } from '@/layouts';
 import {
   HomePage,
   Nearbycities,
+  Attraction,
 } from '@/pages';
 
 export const PATHS = {
   HOME: '/',
   NEARBYCITY: '/nearbycities',
+  ATTRACTION: '/attraction',
 };
 
 export const ROUTES = [
@@ -22,6 +24,13 @@ export const ROUTES = [
     title: 'Nearby cities recommendation',
     layout: DefaultLayout,
     element: Nearbycities,
+    children: [],
+  },
+  {
+    path: PATHS.ATTRACTION,
+    title: 'Attraction places recommendation',
+    layout: DefaultLayout,
+    element: Attraction,
     children: [],
   }
 ]
