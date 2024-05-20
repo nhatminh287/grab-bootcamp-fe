@@ -1,4 +1,4 @@
-import { IApiAttractionResponse } from '@/types';
+import { IApiAttractionResponse, IAttraction, IHotel, IApiAttractionDetailResponse } from '@/types';
 import { axiosClient } from '@/utils';
 
 export const attractionApi = {
@@ -7,4 +7,11 @@ export const attractionApi = {
     return axiosClient.get(`/recommendations/${state}`);
   },
 
+  getTopAttractions: (): Promise<IAttraction[]> =>{
+    return axiosClient.get(`/top-trending-attractions`);
+  },
+
+  attractionDetail: (name: string): Promise<IApiAttractionDetailResponse> => {
+    return axiosClient.get(`/attraction-detail/${name}`);
+  }
 };

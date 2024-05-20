@@ -9,7 +9,7 @@ import { notifications } from "@mantine/notifications";
 import { IAttraction } from "@/types";
 import { Rating } from '@smastrom/react-rating'
 import { useDisclosure } from '@mantine/hooks';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import * as yup from "yup";
 interface IFormData {
@@ -29,6 +29,7 @@ export default function Attraction() {
   const [states, setStates] = useState<string[]>()
   const [attractions, setAttractions] = useState<IAttraction[]>()
   const [province, setProvince] = useState<string>()
+  const navigate = useNavigate();
   const {
     control,
     reset,
@@ -154,14 +155,16 @@ export default function Attraction() {
           {attractions.map((attraction, index) => (          
             <div key={index} className="mx-2 mt-2 ">
               <div className="mb-3">
+              <div className="mb-3 cursor-pointer hover:opacity-50 hover:underline" onClick={() => navigate('/attraction/detail',{ state: { data: attraction.name }})}>
                 <Title order={3} >{`${index+1}.${attraction.name}`}</Title>
+              </div>
                 <Rating
                   style={{ maxWidth: 180 }}
                   value={parseFloat(attraction.rating)}
                   readOnly
                 />
               </div>
-              <Image src={attraction.image}/>
+              <Image src={attraction.image} radius="lg"/>
             </div>
           ))}
         </div>

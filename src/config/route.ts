@@ -3,12 +3,16 @@ import {
   HomePage,
   Nearbycities,
   Attraction,
+  Community,
+  AttractionDetail,
 } from '@/pages';
 
 export const PATHS = {
   HOME: '/',
   NEARBYCITY: '/nearbycities',
   ATTRACTION: '/attraction',
+  COMMUNITY: '/community',
+  ATTRACTIONDETAIL: '/attraction/detail',
 };
 
 export const ROUTES = [
@@ -32,5 +36,19 @@ export const ROUTES = [
     layout: DefaultLayout,
     element: Attraction,
     children: [],
-  }
+  },
+  {
+    path: PATHS.COMMUNITY,
+    title: 'Top attraction places recommendation',
+    layout: DefaultLayout,
+    element: Community,
+    children: [],
+  },
+  {
+    path: PATHS.ATTRACTIONDETAIL,
+    title: 'Attraction detail',
+    layout: DefaultLayout,
+    element: AttractionDetail,
+    children: [],
+  },
 ]
