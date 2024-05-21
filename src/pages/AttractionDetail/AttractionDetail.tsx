@@ -1,13 +1,14 @@
 import { Card } from '@/components';
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { attractionApi } from '@/services';
 import { ImageCardProps } from '@/components/Card/Card'
 import { IAttractionDetail, IReview, IHotel, IRestaurant } from '@/types';
-import { Title, Image,Text, Divider, Flex } from '@mantine/core';
+import { Title, Image,Text, Divider, Flex, Button, Anchor } from '@mantine/core';
 import { Link } from 'react-router-dom'
 import { Carousel } from '@mantine/carousel';
 import { Rating } from '@smastrom/react-rating';
+import { IconPencilPlus } from '@tabler/icons-react'
 
 const cardProps = {
     name: "Beautiful Landscape",
@@ -21,6 +22,7 @@ const cardProps = {
 export default function AttractionDetail() {
     const location = useLocation();
   var { data } = location.state || {};
+  const navigate = useNavigate();
   const [CardProps, setCardProps] = useState<ImageCardProps>()
   const [attraction, setAttraction] = useState<IAttractionDetail>()
   const [reviews, setReviews] = useState<IReview[]>()
@@ -28,7 +30,6 @@ export default function AttractionDetail() {
   const [restaurants, setRestaurants] = useState<IRestaurant[]>();
   useEffect(() => {
     getAttractionDetail();
-    console.log("cArd props 2:", CardProps)
   }, []);
 
   const getAttractionDetail = async () => {
@@ -53,9 +54,11 @@ export default function AttractionDetail() {
   }
 
   const setCardPropsPromise = async (props: ImageCardProps) => {
-    console.log('goheere')
     console.log('props: ', props);
     setCardProps(props);
+  }
+  const handleAddReview = (name: string) => {
+    navigate('/contribute', { state: { data: name }})
   }
     return (
         <div className='w-full h-[3000px] pt-6 gap-1'>
@@ -63,12 +66,12 @@ export default function AttractionDetail() {
             <div className='mx-auto w-11/12 pt-2'>
                 <Flex className='gap-2'>
                     <Title order={2} className='indent-14'>{`${attraction?.state}, Vietnam`}</Title>
-                    <Rating
+                    {attraction? <Rating
                     
                       style={{ width: 150 }}
-                      value={parseFloat(attraction!.rating)}
+                      value={parseFloat(attraction.rating)}
                       readOnly
-                    />
+                    /> : null}
                 </Flex>
                 <div>
                     <div className='mt-3 indent-2'>
@@ -87,15 +90,17 @@ export default function AttractionDetail() {
                         {
                             hotels? hotels.map(hotel =>
                                 <Carousel.Slide>
-                                    <Link to={hotel.url}>
+                                    <Anchor className="hover:opacity-50" href={`https://${hotel.url}`} target="_blank" underline="never">
                                         <Image src={hotel.image} h={350} radius="lg" />
-                                        <Text>{hotel.name}</Text>
+                                        <div className='text-black hover:opacity-50 hover:underline decoration-black'>
+                                            <Text fw={500} size="lg">{hotel.name}</Text>
+                                        </div>
                                         <Rating
                                             style={{ maxWidth: 120 }}
                                             value={parseFloat(hotel.rating)}
                                             readOnly
                                         />
-                                    </Link>
+                                    </Anchor>
                                 </Carousel.Slide>
                             ) : null
                         }
@@ -118,23 +123,30 @@ export default function AttractionDetail() {
                         {
                             restaurants? restaurants.map(restaurant =>
                                 <Carousel.Slide>
-                                    <Link to={restaurant.url}>
+                                    <Anchor className="hover:opacity-50" href={`https://${restaurant.url}`} target="_blank" underline="never">
                                         <Image src={restaurant.image} h={350} radius="lg" />
-                                        <Text>{restaurant.name}</Text>
+                                        <div className='text-black hover:opacity-50 hover:underline decoration-black'>
+                                            <Text fw={500} size="lg">{restaurant.name}</Text>
+                                        </div>
                                         <Rating
                                             style={{ maxWidth: 120 }}
                                             value={parseFloat(restaurant.rating)}
                                             readOnly
                                         />
-                                    </Link>
+                                    </Anchor>
                                 </Carousel.Slide>
                             ) : null
                         }
                     </Carousel>
                 </div>
                 <div>
-                    <div className='mt-3 indent-2'>
+                    <div className='flex mt-3 indent-2 justify-between'>
                         <Title order={3}>Review</Title>
+                        <div className='mr-2'>
+                            <Button onClick={() => handleAddReview(attraction!.name)} leftSection={<IconPencilPlus size={14} />} variant="default">
+                                Add review
+                            </Button>
+                        </div>
                     </div>
                     {
                         reviews ? reviews.map(review => (
@@ -149,6 +161,7 @@ export default function AttractionDetail() {
                                     />
                                 </Flex>
                                 <Title order={4}>{review.title}</Title>
+                                <Text size="xs" fs="italic">{review.time}</Text>
                                 <Text>{review.content}</Text>
                                 
                             </div>
@@ -157,6 +170,7 @@ export default function AttractionDetail() {
                 </div>
 
             </div>
+            <div className='w-full h-3'></div>
         </div>
     )
 }

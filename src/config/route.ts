@@ -5,6 +5,7 @@ import {
   Attraction,
   Community,
   AttractionDetail,
+  Contribute
 } from '@/pages';
 
 export const PATHS = {
@@ -13,6 +14,7 @@ export const PATHS = {
   ATTRACTION: '/attraction',
   COMMUNITY: '/community',
   ATTRACTIONDETAIL: '/attraction/detail',
+  CONTRIBUTE: '/contribute'
 };
 
 export const ROUTES = [
@@ -49,6 +51,13 @@ export const ROUTES = [
     title: 'Attraction detail',
     layout: DefaultLayout,
     element: AttractionDetail,
+    children: [],
+  },
+  {
+    path: PATHS.CONTRIBUTE,
+    title: 'Contribute',
+    layout: DefaultLayout,
+    element: Contribute,
     children: [],
   },
 ]

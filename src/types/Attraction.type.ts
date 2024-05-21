@@ -41,6 +41,8 @@ export interface IReviewScore {
 export interface IReview {
     _id: string;
     username: string;
+    type_trip: string;
+    time: string;
     rating: string;
     title: string;
     content: string;

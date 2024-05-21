@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { BrowserRouter, Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import { PATHS, ROUTES } from '@/config';
-
+import { Notifications } from '@mantine/notifications';
 
 
 

@@ -155,11 +155,11 @@ export default function Attraction() {
           {attractions.map((attraction, index) => (          
             <div key={index} className="mx-2 mt-2 ">
               <div className="mb-3">
-              <div className="mb-3 cursor-pointer hover:opacity-50 hover:underline" onClick={() => navigate('/attraction/detail',{ state: { data: attraction.name }})}>
-                <Title order={3} >{`${index+1}.${attraction.name}`}</Title>
-              </div>
+                <div className="mb-3 cursor-pointer hover:opacity-50 hover:underline" onClick={() => navigate('/attraction/detail',{ state: { data: attraction.name }})}>
+                  <Title order={3} >{`${index+1}.${attraction.name}`}</Title>
+                </div>
                 <Rating
-                  style={{ maxWidth: 180 }}
+                  style={{ maxWidth: 150 }}
                   value={parseFloat(attraction.rating)}
                   readOnly
                 />

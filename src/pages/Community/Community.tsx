@@ -51,7 +51,7 @@ export default function Community() {
               <div className="mb-3">
                 <Title order={3} >{`${index+1}.${attraction.name}`}</Title>
                 <Rating
-                  style={{ maxWidth: 180 }}
+                  style={{ maxWidth: 150 }}
                   value={parseFloat(attraction.rating)}
                   readOnly
                 />

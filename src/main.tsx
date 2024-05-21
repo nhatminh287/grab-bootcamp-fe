@@ -8,10 +8,12 @@ import '@mantine/notifications/styles.css';
 import { MantineProvider } from '@mantine/core';
 import '@smastrom/react-rating/style.css'
 import '@mantine/carousel/styles.css';
+import { Notifications } from '@mantine/notifications';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <MantineProvider>
+      <Notifications />
       <App />
     </MantineProvider>
   </React.StrictMode>,
