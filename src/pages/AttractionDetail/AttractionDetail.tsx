@@ -61,7 +61,7 @@ export default function AttractionDetail() {
     navigate('/contribute', { state: { data: name }})
   }
     return (
-        <div className='w-full h-[3000px] pt-6 gap-1'>
+        <div className='w-full pt-6 gap-1'>
             {CardProps? <Card {...CardProps} /> : null}
             <div className='mx-auto w-11/12 pt-2'>
                 <Flex className='gap-2'>

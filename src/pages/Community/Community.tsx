@@ -4,13 +4,14 @@ import Logo from "@/assets/images/logo.png";
 import { attractionApi, statesApi, } from "@/services";
 import { IAttraction } from "@/types";
 import { Rating } from '@smastrom/react-rating'
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import * as yup from "yup";
 
 export default function Community() {
   const location = useLocation();
   var { state } = location.state || {};
+  const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
 
   const [attractions, setAttractions] = useState<IAttraction[]>()
@@ -49,7 +50,9 @@ export default function Community() {
           {attractions.map((attraction, index) => (          
             <div key={index} className="mx-2 mt-2 ">
               <div className="mb-3">
-                <Title order={3} >{`${index+1}.${attraction.name}`}</Title>
+                <div className="mb-3 cursor-pointer hover:opacity-50 hover:underline" onClick={() => navigate('/attraction/detail',{ state: { data: attraction.name }})}>
+                  <Title order={3} >{`${index+1}.${attraction.name}`}</Title>
+                </div>
                 <Rating
                   style={{ maxWidth: 150 }}
                   value={parseFloat(attraction.rating)}

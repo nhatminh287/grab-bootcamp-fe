@@ -1,4 +1,4 @@
-import { Image, Title, Button, LoadingOverlay } from "@mantine/core";
+import { Image, Title, Button, LoadingOverlay, Text } from "@mantine/core";
 import { useEffect, useState } from "react";
 import Logo from "@/assets/images/logo.png";
 import { Form, useForm } from "react-hook-form";
@@ -163,6 +163,7 @@ export default function Attraction() {
                   value={parseFloat(attraction.rating)}
                   readOnly
                 />
+                <Text size="md" c="gray">{attraction.tag} </Text>
               </div>
               <Image src={attraction.image} radius="lg"/>
             </div>
